@@ -88,11 +88,15 @@ function App() {
 
   return (
     <div className="text-center w-full max-w-[1200px] mx-auto rounded-xl bg-[#f5f5f2] p-4">
+      <h1 className="text-3xl font-bold mb-4">GitHub Commit Chart</h1>
       <form className="flex gap-[0_8px] w-full" onSubmit={handleSubmit}>
-        <input
+      <input
           type="text"
           value={username}
-          className="p-3 w-full border border-solid border-red-500 rounded-lg focus:outline-none focus:border-red-700"
+          className="p-3 w-full border border-solid border-gray-300 rounded-lg 
+            focus:outline-none focus:border-gray-500 focus:ring-2 focus:ring-gray-200
+            hover:border-gray-400 transition-colors
+            placeholder:text-gray-400"
           placeholder="Enter your github username"
           onChange={(e) => setUsername(e.target.value)}
         />
