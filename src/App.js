@@ -7,6 +7,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [repos, setRepos] = useState([]);
   const [error, setError] = useState("");
+  const [userInfo, setUserInfo] = useState(null);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -17,17 +18,24 @@ function App() {
     setLoading(true);
     setError("");
     setRepos([]);
+    setUserInfo(null);
 
     if (!username.trim()) {
       setError("Please enter a GitHub username");
       setLoading(false);
       return;
     }
-
     Axios({
       method: "get",
-      url: `https://api.github.com/users/${username}/repos`,
+      url: `https://api.github.com/users/${username}`,
     })
+      .then((userRes) => {
+        setUserInfo(userRes.data);
+        return Axios({
+          method: "get",
+          url: `https://api.github.com/users/${username}/repos`,
+        });
+      })
       .then((res) => {
         const repoData = res.data.map(repo => ({
           name: repo.name,
@@ -62,6 +70,7 @@ function App() {
           setError("An unexpected error occurred.");
         }
         setRepos([]);
+        setUserInfo(null);
       })
       .finally(() => {
         setLoading(false);
@@ -70,7 +79,7 @@ function App() {
 
   function renderRepo(repo) {
     return (
-      <li key={repo.id} className="list-none ">
+      <li key={repo.id} className="list-none">
         <a
           href={repo.html_url}
           target="_blank"
@@ -113,6 +122,25 @@ function App() {
         {error && (
           <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-lg border border-red-300">
             {error}
+          </div>
+        )}
+
+        {userInfo && (
+          <div className="mt-8 flex items-center justify-center gap-4 p-6 bg-white rounded-2xl shadow-lg">
+            <img 
+              src={userInfo.avatar_url} 
+              alt={`${username}'s avatar`}
+              className="w-20 h-20 rounded-full border-2 border-gray-200"
+            />
+            <div className="text-left">
+              <h2 className="text-xl font-bold">{userInfo.name || username}</h2>
+              <p className="text-gray-600">{userInfo.bio || 'No bio available'}</p>
+              <div className="flex gap-4 mt-2 text-sm text-gray-500">
+                <span>👥 {userInfo.followers} followers</span>
+                <span>👤 {userInfo.following} following</span>
+                <span>📚 {userInfo.public_repos} repos</span>
+              </div>
+            </div>
           </div>
         )}
 
