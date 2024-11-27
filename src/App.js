@@ -98,7 +98,7 @@ function App() {
   return (
     <>
       <h1 className="text-3xl font-bold my-12 text-center">GitHub Commit Chart</h1>
-      <div className="text-center w-full max-w-[1200px] mx-auto rounded-xl bg-[#f5f5f2] p-4">
+      <div className="text-center w-full max-w-[800px] mx-auto rounded-xl bg-[#f5f5f2] p-4">
         <form className="flex gap-[0_8px] w-full" onSubmit={handleSubmit}>
           <input
             type="text"
